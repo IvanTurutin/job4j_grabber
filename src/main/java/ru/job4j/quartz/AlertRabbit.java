@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import static org.quartz.JobBuilder.*;
@@ -26,7 +24,10 @@ public class AlertRabbit implements  AutoCloseable {
     private Connection cn;
 
     public static void main(String[] args) {
-        try (Connection con = new AlertRabbit().init()) {
+        AlertRabbit alertRabbit = new AlertRabbit();
+        Properties prop = alertRabbit.init();
+        int interval = Integer.parseInt(prop.getProperty("rabbit.interval"));
+        try (Connection con = alertRabbit.getConnection(prop)) {
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
             JobDataMap data = new JobDataMap();
@@ -35,7 +36,7 @@ public class AlertRabbit implements  AutoCloseable {
                     .usingJobData(data)
                     .build();
             SimpleScheduleBuilder times = simpleSchedule()
-                    .withIntervalInSeconds(5)
+                    .withIntervalInSeconds(interval)
                     .repeatForever();
             Trigger trigger = newTrigger()
                     .startNow()
@@ -49,15 +50,24 @@ public class AlertRabbit implements  AutoCloseable {
         }
     }
 
-    public Connection init() {
+    public Properties init() {
+        Properties config;
         try (InputStream in = AlertRabbit.class.getClassLoader().getResourceAsStream("rabbit.properties")) {
-            Properties config = new Properties();
+            config = new Properties();
             config.load(in);
-            Class.forName(config.getProperty("driver-class-name"));
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+        return config;
+    }
+
+    public Connection getConnection(Properties prop) {
+        try {
+            Class.forName(prop.getProperty("driver-class-name"));
             cn = DriverManager.getConnection(
-                    config.getProperty("url"),
-                    config.getProperty("username"),
-                    config.getProperty("password")
+                    prop.getProperty("url"),
+                    prop.getProperty("username"),
+                    prop.getProperty("password")
             );
         } catch (Exception e) {
             throw new IllegalStateException(e);
