@@ -17,7 +17,7 @@ public class HabrCareerParse {
     private String retrieveDescription(String link) throws IOException {
         Connection connection = Jsoup.connect(link);
         Document document = connection.get();
-        Elements titleElement = document.select(".job_show_description__vacancy_description"); //
+        Elements titleElement = document.select(".job_show_description__vacancy_description");
         var ls = System.lineSeparator();
         StringBuilder sb = new StringBuilder();
         Elements elements = titleElement.select("p,li");
