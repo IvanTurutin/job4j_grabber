@@ -5,19 +5,9 @@ import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 public class HarbCareerDateTimeParser implements DateTimeParser {
 
-    private LocalDateTime parsedDate;
-
-    public HarbCareerDateTimeParser() {
-    }
-
     @Override
     public LocalDateTime parse(String parse) {
-        parsedDate = LocalDateTime.parse(parse, ISO_DATE_TIME);
-        return parsedDate;
-    }
-
-    public LocalDateTime getParsedDate() {
-        return parsedDate;
+        return LocalDateTime.parse(parse, ISO_DATE_TIME);
     }
 
     public static void main(String[] args) {
@@ -25,7 +15,5 @@ public class HarbCareerDateTimeParser implements DateTimeParser {
         HarbCareerDateTimeParser harbCareerDateTimeParser = new HarbCareerDateTimeParser();
         LocalDateTime parsedDateTest = harbCareerDateTimeParser.parse(dateForParseTest);
         System.out.println(parsedDateTest);
-        LocalDateTime parsedDateTestGet = harbCareerDateTimeParser.getParsedDate();
-        System.out.println(parsedDateTestGet);
     }
 }
