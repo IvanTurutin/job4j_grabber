@@ -61,17 +61,13 @@ public class AlertRabbit implements  AutoCloseable {
         return config;
     }
 
-    public Connection getConnection(Properties prop) {
-        try {
-            Class.forName(prop.getProperty("driver-class-name"));
-            cn = DriverManager.getConnection(
-                    prop.getProperty("url"),
-                    prop.getProperty("username"),
-                    prop.getProperty("password")
-            );
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
+    public Connection getConnection(Properties prop) throws ClassNotFoundException, SQLException {
+        Class.forName(prop.getProperty("driver-class-name"));
+        cn = DriverManager.getConnection(
+                prop.getProperty("url"),
+                prop.getProperty("username"),
+                prop.getProperty("password")
+        );
         return cn;
     }
 
