@@ -17,12 +17,26 @@ public class HabrCareerParse {
     private String retrieveDescription(String link) throws IOException {
         Connection connection = Jsoup.connect(link);
         Document document = connection.get();
-        Elements titleElement = document.select(".job_show_description__vacancy_description");
-        var ls = System.lineSeparator();
-        StringBuilder sb = new StringBuilder();
-        Elements elements = titleElement.select("p,li");
-        elements.forEach(element -> sb.append(element.text()).append(ls));
-    return sb.toString();
+        Element descriptionElement = document.selectFirst(".style-ugc");
+        return descriptionElement.text();
+    }
+
+    private void getPost(Element row) throws IOException {
+            Element titleElement = row.select(".vacancy-card__title").first();
+            Element linkElement = titleElement.child(0);
+            String vacancyName = titleElement.text();
+            Element vacancyCardDate = row.select(".vacancy-card__date").first();
+            Element dateTime = vacancyCardDate.child(0);
+            String link = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
+            System.out.printf("%s %s %s%n", vacancyName, link, dateTime.attr("datetime"));
+        /**
+         * return new Post(vacancyName,
+         *                     link,
+         *                     retrieveDescription(link),
+         *                     new HarbCareerDateTimeParser().parse(dateTime.attr("datetime"))
+         *             );
+         */
+
     }
 
     public static void main(String[] args) throws IOException {
@@ -32,15 +46,14 @@ public class HabrCareerParse {
             Document document = connection.get();
             Elements rows = document.select(".vacancy-card__inner");
             rows.forEach(row -> {
-                Element titleElement = row.select(".vacancy-card__title").first();
-                Element linkElement = titleElement.child(0);
-                String vacancyName = titleElement.text();
-                Element vacancyCardDate = row.select(".vacancy-card__date").first();
-                Element dateTime = vacancyCardDate.child(0);
-                String link = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
-                System.out.printf("%s %s %s%n", vacancyName, link, dateTime.attr("datetime"));
+                try {
+                    new HabrCareerParse().getPost(row);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
         }
+
         System.out.println(
                 new HabrCareerParse()
                         .retrieveDescription("https://career.habr.com/vacancies/1000100655")
