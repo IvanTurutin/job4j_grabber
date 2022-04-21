@@ -12,7 +12,7 @@ import java.util.Properties;
 public class PsqlStore implements Store, AutoCloseable {
 
     private Connection cnn;
-    String table = "post";
+    private final String table = "post";
 
     public PsqlStore(Properties cfg) throws SQLException {
         try {
@@ -20,12 +20,11 @@ public class PsqlStore implements Store, AutoCloseable {
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
-
-            cnn = DriverManager.getConnection(
-                    cfg.getProperty("url"),
-                    cfg.getProperty("username"),
-                    cfg.getProperty("password")
-            );
+        cnn = DriverManager.getConnection(
+                cfg.getProperty("url"),
+                cfg.getProperty("username"),
+                cfg.getProperty("password")
+        );
         /* cnn = DriverManager.getConnection(...); */
     }
 

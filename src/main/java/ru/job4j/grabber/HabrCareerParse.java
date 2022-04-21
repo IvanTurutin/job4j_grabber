@@ -49,7 +49,7 @@ public class HabrCareerParse implements Parse {
     @Override
     public List<Post> list(String link) {
         List<Post> posts = new ArrayList<>();
-        for (int i = 1; i < 6; i++) {
+        for (int i = 1; i < 2; i++) {
             String pageLink = String.format("%s%d", link, i);
             Connection connection = Jsoup.connect(pageLink);
             try {
@@ -67,8 +67,7 @@ public class HabrCareerParse implements Parse {
 
     public static void main(String[] args) {
         Parse habrCareerParse = new HabrCareerParse(new HarbCareerDateTimeParser());
-        String pageLink = PAGE_LINK;
-        List<Post> posts = new ArrayList<>(habrCareerParse.list(pageLink));
+        List<Post> posts = new ArrayList<>(habrCareerParse.list(PAGE_LINK));
         posts.forEach(post -> System.out.println(post.getTitle()));
     }
 
