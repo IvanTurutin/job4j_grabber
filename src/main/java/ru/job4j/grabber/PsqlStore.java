@@ -1,7 +1,6 @@
 package ru.job4j.grabber;
 
 import ru.job4j.grabber.utils.HarbCareerDateTimeParser;
-import ru.job4j.quartz.AlertRabbit;
 
 import java.io.InputStream;
 import java.sql.*;
@@ -12,7 +11,7 @@ import java.util.Properties;
 public class PsqlStore implements Store, AutoCloseable {
 
     private Connection cnn;
-    private final String table = "post";
+    public static final String TABLE = "post";
 
     public PsqlStore(Properties cfg) throws SQLException {
         try {
@@ -25,12 +24,11 @@ public class PsqlStore implements Store, AutoCloseable {
                 cfg.getProperty("username"),
                 cfg.getProperty("password")
         );
-        /* cnn = DriverManager.getConnection(...); */
     }
 
     @Override
     public void save(Post post) {
-        String query = String.format("insert into %s (name, text, link, created) values (?, ?, ?, ?)", table);
+        String query = String.format("insert into %s (name, text, link, created) values (?, ?, ?, ?)", TABLE);
         try (PreparedStatement ps = cnn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, post.getTitle());
             ps.setString(2, post.getDescription());
@@ -50,7 +48,7 @@ public class PsqlStore implements Store, AutoCloseable {
     @Override
     public List<Post> getAll() {
         List<Post> posts = new ArrayList<>();
-        String query = String.format("select * from %s", table);
+        String query = String.format("select * from %s", TABLE);
         try (PreparedStatement ps = cnn.prepareStatement(query)) {
             try (ResultSet resultSet = ps.executeQuery()) {
                 while (resultSet.next()) {
@@ -76,7 +74,7 @@ public class PsqlStore implements Store, AutoCloseable {
     @Override
     public Post findById(int id) {
         Post post = null;
-        String query = String.format("select * from %s where id = ?", table);
+        String query = String.format("select * from %s where id = ?", TABLE);
         try (PreparedStatement ps = cnn.prepareStatement(query)) {
             ps.setInt(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
