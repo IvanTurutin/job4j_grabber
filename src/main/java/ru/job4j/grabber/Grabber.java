@@ -74,15 +74,11 @@ public class Grabber implements Grab {
             try (ServerSocket server = new ServerSocket(Integer.parseInt(cfg.getProperty("port")))) {
                 while (!server.isClosed()) {
                     Socket socket = server.accept();
-                    try (OutputStreamWriter out = (
-                            new OutputStreamWriter(
-                                    socket.getOutputStream(),
-                                    "WINDOWS-1251")
-                    )) {
-                        out.write("HTTP/1.1 200 OK\r\n\r\n");
+                    try (OutputStream out = socket.getOutputStream()) {
+                        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes(Charset.forName("Windows-1251")));
                         for (Post post : store.getAll()) {
-                            out.write(post.toString());
-                            out.write(System.lineSeparator());
+                            out.write(post.toString().getBytes(Charset.forName("Windows-1251")));
+                            out.write(System.lineSeparator().getBytes(Charset.forName("Windows-1251")));
                         }
                     } catch (IOException io) {
                         io.printStackTrace();
