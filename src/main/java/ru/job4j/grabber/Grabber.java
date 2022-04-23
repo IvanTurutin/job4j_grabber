@@ -18,6 +18,7 @@ import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 public class Grabber implements Grab {
+    private final Charset charset = Charset.forName("Windows-1251");
     private final Properties cfg = new Properties();
 
     public Store store() throws SQLException {
@@ -75,10 +76,10 @@ public class Grabber implements Grab {
                 while (!server.isClosed()) {
                     Socket socket = server.accept();
                     try (OutputStream out = socket.getOutputStream()) {
-                        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes(Charset.forName("Windows-1251")));
+                        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
                         for (Post post : store.getAll()) {
-                            out.write(post.toString().getBytes(Charset.forName("Windows-1251")));
-                            out.write(System.lineSeparator().getBytes(Charset.forName("Windows-1251")));
+                            out.write(post.toString().getBytes(charset));
+                            out.write(System.lineSeparator().getBytes());
                         }
                     } catch (IOException io) {
                         io.printStackTrace();
