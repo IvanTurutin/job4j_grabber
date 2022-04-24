@@ -36,22 +36,15 @@ join company as c
 ON p.company_id = c.id
 WHERE p.company_id NOT IN (5);
 
-SELECT c.name as Компания, c.counts as Количество
-FROM (
-	SELECT c.name as name, COUNT(p.name) AS counts
-	FROM person as p
-	join company as c
-	ON p.company_id = c.id
-	GROUP BY c.name
-) as c
-where c.counts = (
-	SELECT MAX(c.counts)
-	FROM (
-		SELECT c.name as name, COUNT(p.name) AS counts
-		FROM person as p
-		join company as c
-		ON p.company_id = c.id
-		GROUP BY c.name
-	) as c
+SELECT c.name as name, COUNT(p.name) AS counts
+FROM person as p
+join company as c
+ON p.company_id = c.id
+GROUP BY c.name
+having count(p.name) = (
+	select count(*)
+	from person as p
+	GROUP BY p.company_id
+	order by count(p.company_id) desc
+	limit 1
 );
-
