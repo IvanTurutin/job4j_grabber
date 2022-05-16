@@ -2,7 +2,7 @@ package ru.job4j.cache;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
+import java.nio.file.Files;
 
 public class DirFileCache extends AbstractCache<String, String> {
 
@@ -14,16 +14,17 @@ public class DirFileCache extends AbstractCache<String, String> {
 
     @Override
     protected String load(String key) {
+        String file = "";
         Path path = Paths.get(cachingDir, key);
-        StringBuilder sb = new StringBuilder();
-        try (var scanner = new Scanner(path)) {
-            while (scanner.hasNextLine()) {
-                sb.append(scanner.nextLine());
+        if (path.toFile().exists()) {
+            try {
+                file = Files.readString(path);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            System.out.println("No such file. Please enter right path/filename.");
         }
-        return sb.toString();
+        return file;
     }
-
 }
