@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class MaxMin {
     public <T> T max(List<T> value, Comparator<T> comparator) {
-        return min(value, comparator.reversed());
+        return minMax(value, comparator.reversed());
     }
     /**
      * Вариант с использованием сортировки (медленнее работает, т.к. список сначала сортируется,
@@ -19,6 +19,10 @@ public class MaxMin {
      *      }
      */
     public <T> T min(List<T> value, Comparator<T> comparator) {
+        return minMax(value, comparator);
+    }
+
+    private <T> T minMax(List<T> value, Comparator<T> comparator) {
         T target = value.get(0);
         for (T tmp : value) {
             if (comparator.compare(target, tmp) >= 0) {
