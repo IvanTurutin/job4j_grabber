@@ -18,7 +18,7 @@ public class Test {
         store.add(worker2);
         store.add(worker3);
 
-        //Comparator<Employee> comparator = (o1, o2) -> Double.compare(o1.getSalary(), o2.getSalary());
+        /*Comparator<Employee> comparator = (o1, o2) -> Double.compare(o1.getSalary(), o2.getSalary());*/
         Comparator<Employee> comparator = (o1, o2) -> 0;
         Predicate<Employee> predicate = em -> true;
 
