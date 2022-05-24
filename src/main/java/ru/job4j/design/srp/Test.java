@@ -1,5 +1,7 @@
 package ru.job4j.design.srp;
 
+import com.google.gson.GsonBuilder;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,5 +33,10 @@ public class Test {
         Report engine2 = new ReportEngineBuhg(store, df);
         System.out.println(engine2.generate(predicate));
 
+        Report engineXML = new ReportEngineXML(store);
+        System.out.println(engineXML.generate(em -> true));
+
+        Report engineJSON = new ReportEngineJSON(store);
+        System.out.println(engineJSON.generate(em -> true));
     }
 }
