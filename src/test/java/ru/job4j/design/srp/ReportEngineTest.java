@@ -2,8 +2,15 @@ package ru.job4j.design.srp;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
+
+import com.google.gson.GsonBuilder;
 import org.junit.Test;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -109,4 +116,53 @@ public class ReportEngineTest {
                 .append("</html>").append(ls);
         assertThat(engine.generate(em -> true), is(expect.toString()));
     }
+
+    @Test
+    public void whenGeneratedJson() {
+        MemStore store = new MemStore();
+
+        Calendar now = Calendar.getInstance();
+        Employee worker1 = new Employee("Ivan", now, now, 100);
+        Employee worker2 = new Employee("Vasiliy", now, now, 200);
+        store.add(worker1);
+        store.add(worker2);
+
+        Report engine = new ReportEngineJSON(store);
+
+        var gson = new GsonBuilder().create();
+        String expect = gson.toJson(new Employees(store.findBy(em -> true)));
+
+        assertThat(engine.generate(em -> true), is(expect));
+    }
+
+    @Test
+    public void whenGeneratedXML() {
+        MemStore store = new MemStore();
+
+        Calendar now = Calendar.getInstance();
+        Employee worker1 = new Employee("Ivan", now, now, 100);
+        Employee worker2 = new Employee("Vasiliy", now, now, 200);
+        store.add(worker1);
+        store.add(worker2);
+
+        Report engine = new ReportEngineXML(store);
+
+        String expect = "";
+        try {
+            JAXBContext context = JAXBContext.newInstance(Employees.class);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            try (StringWriter writer = new StringWriter()) {
+                marshaller.marshal(new Employees(store.findBy(em -> true)), writer);
+                expect = writer.getBuffer().toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+
+        assertThat(engine.generate(em -> true), is(expect));
+    }
+
 }
