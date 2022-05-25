@@ -12,8 +12,10 @@ import javax.xml.bind.Marshaller;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Locale;
 
 public class ReportEngineTest {
 
@@ -122,6 +124,8 @@ public class ReportEngineTest {
         MemStore store = new MemStore();
 
         Calendar now = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss X");
+        String date = dateFormat.format(now.getTime());
         Employee worker1 = new Employee("Ivan", now, now, 100);
         Employee worker2 = new Employee("Vasiliy", now, now, 200);
         store.add(worker1);
@@ -129,10 +133,15 @@ public class ReportEngineTest {
 
         Report engine = new ReportEngineJSON(store);
 
-        var gson = new GsonBuilder().create();
-        String expect = gson.toJson(new Employees(store.findBy(em -> true)));
+        String pattern = "{\"name\":\"%s\",\"hired\":\"%s\",\"fired\":\"%s\",\"salary\":%.1f}";
+        StringBuilder expect = new StringBuilder()
+                .append("[")
+                .append(String.format(Locale.US, pattern, worker1.getName(), date, date, worker1.getSalary()))
+                .append(",")
+                .append(String.format(Locale.US, pattern, worker2.getName(), date, date, worker2.getSalary()))
+                .append("]");
 
-        assertThat(engine.generate(em -> true), is(expect));
+        assertThat(engine.generate(em -> true), is(expect.toString()));
     }
 
     @Test
@@ -140,6 +149,8 @@ public class ReportEngineTest {
         MemStore store = new MemStore();
 
         Calendar now = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss X");
+        String date = dateFormat.format(now.getTime());
         Employee worker1 = new Employee("Ivan", now, now, 100);
         Employee worker2 = new Employee("Vasiliy", now, now, 200);
         store.add(worker1);
@@ -147,22 +158,17 @@ public class ReportEngineTest {
 
         Report engine = new ReportEngineXML(store);
 
-        String expect = "";
-        try {
-            JAXBContext context = JAXBContext.newInstance(Employees.class);
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            try (StringWriter writer = new StringWriter()) {
-                marshaller.marshal(new Employees(store.findBy(em -> true)), writer);
-                expect = writer.getBuffer().toString();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+        String head = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
+        String pattern = "<employees name=\"%s\" hired=\"%s\" fired=\"%s\" salary=\"%.1f\"/>";
+        StringBuilder expect = new StringBuilder()
+                .append(head)
+                .append("<employees>")
+                .append(String.format(Locale.US, pattern, worker1.getName(), date, date, worker1.getSalary()))
+                .append(String.format(Locale.US, pattern, worker2.getName(), date, date, worker2.getSalary()))
+                .append("</employees>");
 
-        assertThat(engine.generate(em -> true), is(expect));
+        String result = engine.generate(em -> true).replaceAll("\\n\\s*", "");
+        assertThat(result, is(expect.toString()));
     }
 
 }
