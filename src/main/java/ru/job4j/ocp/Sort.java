@@ -18,7 +18,7 @@ import java.util.Comparator;
 
 public class Sort {
 
-    ArrayList<Employee> target;
+    private ArrayList<Employee> target;
 
     public ArrayList<Employee> sortDsc(ArrayList<Employee> value, Comparator<Employee> comparator) {
         return sort(value, comparator.reversed());
