@@ -38,5 +38,11 @@ public class Test {
 
         Report engineJSON = new ReportEngineJSON(store);
         System.out.println(engineJSON.generate(em -> true));
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss X");
+        String date = dateFormat.format(now.getTime());
+        System.out.println(date);
+        String pattern = "{\"name\":\"%s\",\"hired\":\"%s\",\"fired\":\"%s\",\"salary\":%.1f}";
+        System.out.format(pattern, worker1.getName(), date, date, worker1.getSalary());
     }
 }
