@@ -17,7 +17,7 @@ public class StoreTest {
         Calendar currentDate = Calendar.getInstance();
 
         double coef = 0.15;
-        long sixtyDayInMillis = 1000L * 60 * 60 * 24 * 60;
+        long sixtyDayInMillis = 1000 * 60 * 60 * 24 * 60;
         Calendar createDate = Calendar.getInstance();
         createDate.setTimeInMillis(currentDate.getTimeInMillis() - (int) (sixtyDayInMillis * (1 - coef)));
         Calendar expiryDate = Calendar.getInstance();
@@ -33,7 +33,7 @@ public class StoreTest {
         Calendar currentDate = Calendar.getInstance();
 
         double coef = 0.751;
-        long sixtyDayInMillis = 1000L * 60 * 60 * 24 * 60;
+        long sixtyDayInMillis = 1000 * 60 * 60 * 24 * 60;
         Calendar createDate = Calendar.getInstance();
         createDate.setTimeInMillis(currentDate.getTimeInMillis() - (int) (sixtyDayInMillis * (1 - coef)));
         Calendar expiryDate = Calendar.getInstance();
@@ -52,7 +52,7 @@ public class StoreTest {
         Calendar currentDate = Calendar.getInstance();
 
         double coef = 0.749;
-        long sixtyDayInMillis = 1000L * 60 * 60 * 24 * 60;
+        long sixtyDayInMillis = 1000 * 60 * 60 * 24 * 60;
         Calendar createDate = Calendar.getInstance();
         createDate.setTimeInMillis(currentDate.getTimeInMillis() - (int) (sixtyDayInMillis * (1 - coef)));
         Calendar expiryDate = Calendar.getInstance();
@@ -71,7 +71,7 @@ public class StoreTest {
         Calendar currentDate = Calendar.getInstance();
 
         double coef = 0.749;
-        long sixtyDayInMillis = 1000L * 60 * 60 * 24 * 60;
+        long sixtyDayInMillis = 1000 * 60 * 60 * 24 * 60;
         Calendar createDate = Calendar.getInstance();
         createDate.setTimeInMillis(currentDate.getTimeInMillis() - (int) (sixtyDayInMillis * (1 - coef)));
         Calendar expiryDate = Calendar.getInstance();
@@ -92,7 +92,7 @@ public class StoreTest {
         Calendar currentDate = Calendar.getInstance();
 
         double coef = 0.0;
-        long sixtyDayInMillis = 1000L * 60 * 60 * 24 * 60;
+        long sixtyDayInMillis = 1000 * 60 * 60 * 24 * 60;
         Calendar createDate = Calendar.getInstance();
         createDate.setTimeInMillis(currentDate.getTimeInMillis() - (int) (sixtyDayInMillis * (1 - coef)));
         Calendar expiryDate = Calendar.getInstance();
@@ -107,11 +107,11 @@ public class StoreTest {
     }
 
     @Test
-    public void whenShopAddFoodWhithDiscount() {
+    public void whenShopAddFoodWithDiscount() {
         Calendar currentDate = Calendar.getInstance();
 
         double coef = 0.249;
-        long sixtyDayInMillis = 1000L * 60 * 60 * 24 * 60;
+        long sixtyDayInMillis = 1000 * 60 * 60 * 24 * 60;
         Calendar createDate = Calendar.getInstance();
         createDate.setTimeInMillis(currentDate.getTimeInMillis() - (int) (sixtyDayInMillis * (1 - coef)));
         Calendar expiryDate = Calendar.getInstance();
@@ -130,7 +130,7 @@ public class StoreTest {
         Calendar currentDate = Calendar.getInstance();
 
         double coef = -0.1;
-        long sixtyDayInMillis = 1000L * 60 * 60 * 24 * 60;
+        long sixtyDayInMillis = 1000 * 60 * 60 * 24 * 60;
         Calendar createDate = Calendar.getInstance();
         createDate.setTimeInMillis(currentDate.getTimeInMillis() - (int) (sixtyDayInMillis * (1 - coef)));
         Calendar expiryDate = Calendar.getInstance();
@@ -149,11 +149,11 @@ public class StoreTest {
         Calendar currentDate = Calendar.getInstance();
 
         double coef = 0.001;
-        long sixteenDayInMillis = 1000L * 60 * 60 * 24 * 60;
+        long sixtyDayInMillis = 1000 * 60 * 60 * 24 * 60;
         Calendar createDate = Calendar.getInstance();
-        createDate.setTimeInMillis(currentDate.getTimeInMillis() - (int) (sixteenDayInMillis * (1 - coef)));
+        createDate.setTimeInMillis(currentDate.getTimeInMillis() - (int) (sixtyDayInMillis * (1 - coef)));
         Calendar expiryDate = Calendar.getInstance();
-        expiryDate.setTimeInMillis(currentDate.getTimeInMillis() + (int) (sixteenDayInMillis * coef));
+        expiryDate.setTimeInMillis(currentDate.getTimeInMillis() + (int) (sixtyDayInMillis * coef));
 
         Food food = new Potatoes("food1", expiryDate, createDate, 100, 0.2);
 

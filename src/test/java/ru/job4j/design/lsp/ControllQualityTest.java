@@ -23,7 +23,7 @@ public class ControllQualityTest {
 
         Calendar currentDate = Calendar.getInstance();
 
-        long sixtyDayInMillis = 1000L * 60 * 60 * 24 * 60;
+        long sixtyDayInMillis = 1000 * 60 * 60 * 24 * 60;
 
         double coef1 = 0.8;
         Calendar createDate1 = Calendar.getInstance();
