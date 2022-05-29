@@ -1,4 +1,4 @@
-package ru.job4j.design.lsp;
+package ru.job4j.design.lsp.shopstore;
 
 import java.util.Calendar;
 import java.util.List;

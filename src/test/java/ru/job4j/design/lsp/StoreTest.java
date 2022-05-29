@@ -1,10 +1,10 @@
 package ru.job4j.design.lsp;
 
 import org.junit.Test;
+import ru.job4j.design.lsp.shopstore.*;
 
 import java.util.Calendar;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;

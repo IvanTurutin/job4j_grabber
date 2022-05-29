@@ -1,19 +1,22 @@
-package ru.job4j.design.lsp;
+package ru.job4j.design.lsp.shopstore;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class Trash implements Store {
+public class Shop implements Store {
     private List<Food> foodList = new ArrayList<>();
 
-
+    @Override
     public boolean add(Food food) {
         boolean rsl = false;
-        if (Store.coeff(food) <= 0) {
+        double coeff = Store.coeff(food);
+        if (coeff <= 0.75 && coeff > 0.25) {
             foodList.add(food);
-            rsl = true;
+        } else if (coeff <= 0.25 && coeff > 0) {
+            food.setPrice(food.getPrice() * (1 - food.getDiscount()));
+            foodList.add(food);
         }
         return rsl;
     }
@@ -43,5 +46,4 @@ public class Trash implements Store {
     public boolean remove(Food food) {
         return foodList.remove(food);
     }
-
 }

@@ -1,6 +1,5 @@
-package ru.job4j.design.lsp;
+package ru.job4j.design.lsp.shopstore;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Potatoes extends Food {

@@ -1,8 +1,8 @@
 package ru.job4j.design.lsp;
 
 import org.junit.Test;
+import ru.job4j.design.lsp.shopstore.*;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -62,7 +62,7 @@ public class ControllQualityTest {
         assertTrue(shop.findAll(f -> true)
                 .contains(new Potatoes("food2", expiryDate2, createDate2, 150, 0.2)));
         assertTrue(shop.findAll(f -> true)
-                .contains(new Bread("food3", expiryDate3, createDate3, 50, 0.1)));
+                .contains(new Bread("food3", expiryDate3, createDate3, 45, 0.1)));
         assertThat(trash.findAll(f -> true).get(0),
                 is(new Bread("food4", expiryDate4, createDate4, 70, 0.1)));
     }
