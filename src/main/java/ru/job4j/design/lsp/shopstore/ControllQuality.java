@@ -12,9 +12,9 @@ public class ControllQuality {
     }
 
     public List<Food> sortFoods(List<Food> foods) {
-        List<Food> foodList = new ArrayList<>();
+        List<Food> foodList = new ArrayList<>(foods);
         for (Store store : stores) {
-            foodList = store.add(foods);
+            foodList = store.add(foodList);
         }
         return foodList;
     }

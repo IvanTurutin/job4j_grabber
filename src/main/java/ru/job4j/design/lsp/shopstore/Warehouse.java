@@ -7,24 +7,14 @@ import java.util.stream.Collectors;
 
 public class Warehouse implements Store {
     private List<Food> foodList = new ArrayList<>();
-
-
-    public boolean add(Food food) {
-        boolean rsl = false;
-        if (Store.coeff(food) > 0.75) {
-            foodList.add(food);
-            rsl = true;
-        }
-        return rsl;
-    }
+    private static final float ALLOWABLE_PERCENTAGE = 0.75f;
 
     @Override
-    public List<Food> add(List<Food> foods) {
-        List<Food> rsl = new ArrayList<>(foods);
-        for (int i = 0; i < foods.size(); i++) {
-            if (add(foods.get(i))) {
-                rsl.remove(i);
-            }
+    public boolean add(Food food) {
+        boolean rsl = false;
+        if (getExpirationPercentage(food) > ALLOWABLE_PERCENTAGE) {
+            foodList.add(food);
+            rsl = true;
         }
         return rsl;
     }
