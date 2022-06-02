@@ -5,7 +5,7 @@ package ru.job4j.design.isp;
  *	Ошибка заключается в том, что не всем программам потребуется сохранять во все форматы сразу.
  *	Для исправления ошибки необходимо разбить интерфейс на 3 интерфейса каждый со своим методом.
  */
-public interface SaveFile {
+interface SaveFile {
     void saveWord(String file);
     void saveTxt(String file);
     void savePdf(String file);

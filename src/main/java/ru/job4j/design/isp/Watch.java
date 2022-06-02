@@ -7,7 +7,7 @@ package ru.job4j.design.isp;
  *	разбить интерфейс на 3 интерфейса каждый со своим методом.
  */
 
-public interface Watch {
+interface Watch {
     String showTime();
     void turnBacklight();
     void setAlarm(String time);

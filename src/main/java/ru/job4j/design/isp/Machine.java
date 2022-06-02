@@ -7,7 +7,7 @@ package ru.job4j.design.isp;
  *	интерфейс на 3 интерфейса каждый со своим методом.
  */
 
-public interface Machine {
+interface Machine {
     void drill();
     void mill();
     void cut();
