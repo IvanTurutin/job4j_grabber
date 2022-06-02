@@ -8,8 +8,13 @@ public class Truck implements Car {
     private String number;
 
     public Truck(String number, int size) {
+        if (PassengerCar.SIZE >= size) {
+            throw new IllegalArgumentException("Illegal argument.");
+        } else {
+            this.size = size;
+        }
         this.number = number;
-        this.size = size;
+
     }
 
     @Override
