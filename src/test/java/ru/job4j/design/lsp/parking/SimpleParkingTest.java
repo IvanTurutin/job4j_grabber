@@ -48,12 +48,12 @@ public class SimpleParkingTest {
         assertFalse(parking.parkCar(passCar2));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void whenParkPassengerCarTwice() {
         Parking parking = new SimpleParking(2, 1);
         Car passCar1 = new PassengerCar("X123CH78");
         parking.parkCar(passCar1);
-        parking.parkCar(passCar1);
+        assertFalse(parking.parkCar(passCar1));
     }
 
     @Test
@@ -65,12 +65,12 @@ public class SimpleParkingTest {
         assertFalse(parking.parkCar(truck2));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void whenParkTruckTwice() {
         Parking parking = new SimpleParking(1, 2);
         Car truck1 = new Truck("X123CH78", 2);
         parking.parkCar(truck1);
-        parking.parkCar(truck1);
+        assertFalse(parking.parkCar(truck1));
     }
 
     @Test
@@ -100,20 +100,20 @@ public class SimpleParkingTest {
         assertThat(result, is(passCar1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void whenParkTruckThenPickUpOther() {
         Parking parking = new SimpleParking(3, 1);
         Car truck1 = new Truck("X123CH78", 2);
         parking.parkCar(truck1);
-        parking.pickUpCar(new Truck("X456CH78", 3));
+        assertNull(parking.pickUpCar(new Truck("X456CH78", 3)));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void whenParkPassengerCarThenPickUpOther() {
         Parking parking = new SimpleParking(3, 1);
         Car passCar1 = new PassengerCar("X123CH78");
         parking.parkCar(passCar1);
-        parking.pickUpCar(new PassengerCar("X456CH78"));
+        assertNull(parking.pickUpCar(new PassengerCar("X456CH78")));
     }
 
     @Test
@@ -132,6 +132,26 @@ public class SimpleParkingTest {
 
         parking.pickUpCar(passCar2);
         assertTrue(parking.parkCar(truck2));
+    }
+
+    @Test
+    public void whenDefragmentationParking() {
+        Parking parking = new SimpleParking(4, 0);
+        Car passCar1 = new PassengerCar("X123CH78");
+        Car passCar2 = new PassengerCar("X234CH78");
+        Car passCar3 = new PassengerCar("X345CH78");
+        Car truck1 = new Truck("X456CH78", 2);
+        parking.parkCar(passCar1);
+        parking.parkCar(passCar2);
+        parking.parkCar(passCar3);
+
+        assertFalse(parking.parkCar(truck1));
+
+        parking.pickUpCar(passCar1);
+        parking.pickUpCar(passCar3);
+        parking.parkCar(passCar3);
+
+        assertTrue(parking.parkCar(truck1));
     }
 
     @Test(expected = IllegalArgumentException.class)

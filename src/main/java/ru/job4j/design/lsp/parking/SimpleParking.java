@@ -5,8 +5,8 @@ import java.lang.IllegalArgumentException;
 public class SimpleParking implements Parking {
 
     private Car[][] places = new Car[2][];
-    private final int passengerIndex = 0;
-    private final int truckIndex = 1;
+    private static final int PASSENGER_INDEX = 0;
+    private static final int TRUCK_INDEX = 1;
 
     /**
      * Переменные searchCacheCar, searchCacheIndexParking, searchCacheIndexPlace представляют собой
@@ -18,8 +18,8 @@ public class SimpleParking implements Parking {
 
 
     public SimpleParking(int passengerPlaces, int truckPlaces) {
-        places[passengerIndex] = new Car[passengerPlaces];
-        places[truckIndex] = new Car[truckPlaces];
+        places[PASSENGER_INDEX] = new Car[passengerPlaces];
+        places[TRUCK_INDEX] = new Car[truckPlaces];
     }
 
     /**
@@ -28,8 +28,11 @@ public class SimpleParking implements Parking {
      * @return Если есть свободное место возвращается true, в противном случае false.
      */
     public boolean searchSpace(Car car) {
-        boolean rslt;
+        if (car == null) {
+            throw new IllegalArgumentException("Illegal argument.");
+        }
 
+        boolean rslt;
         if (searchCar(car)) {
             System.out.println("The car is already in the parking lot.");
             rslt = false;
@@ -40,16 +43,12 @@ public class SimpleParking implements Parking {
     }
 
     private boolean runSearchSpace(Car car) {
-        if (car == null) {
-            throw new IllegalArgumentException("Illegal argument.");
-        }
-
         boolean rslt;
 
         if (car.equals(searchCacheCar)) {
             rslt = true;
-        } else if (car.getSize() == 1) {
-            rslt = searchSpaceOneCarOneSpace(car, passengerIndex);
+        } else if (car.getSize() == PassengerCar.SIZE) {
+            rslt = searchSpaceOneCarOneSpace(car, PASSENGER_INDEX);
         } else {
             rslt = searchSpaceForTruck(car);
         }
@@ -105,16 +104,16 @@ public class SimpleParking implements Parking {
      * @return true если место найдено, false если место не найдено.
      */
     private boolean searchSpaceForTruck(Car car) {
-        boolean rslt = searchSpaceOneCarOneSpace(car, truckIndex);
+        boolean rslt = searchSpaceOneCarOneSpace(car, TRUCK_INDEX);
         if (!rslt) {
             int count = 0;
-            for (int i = 0; i < places[passengerIndex].length; i++) {
-                if (places[passengerIndex][i] == null) {
+            for (int i = 0; i < places[PASSENGER_INDEX].length; i++) {
+                if (places[PASSENGER_INDEX][i] == null) {
                     count++;
                     if (count == car.getSize()) {
                         rslt = true;
                         searchCacheCar = car;
-                        searchCacheIndexParking = passengerIndex;
+                        searchCacheIndexParking = PASSENGER_INDEX;
                         searchCacheIndexPlace = i - car.getSize() + 1;
                         break;
                     }
@@ -134,19 +133,22 @@ public class SimpleParking implements Parking {
      * исключение IllegalArgumentException.
      */
     public boolean parkCar(Car car) {
-        if (searchCar(car)) {
-            throw new IllegalArgumentException("The car is already in the parking lot.");
+        if (car == null) {
+            throw new IllegalArgumentException("Illegal argument.");
         }
+        boolean rslt = false;
 
-        boolean rslt = runSearchSpace(car);
-        if (rslt) {
-            if (searchCacheIndexParking == 1) {
+        if (searchCar(car)) {
+            System.out.println("The car is already in the parking lot.");
+        } else if (runSearchSpace(car)) {
+            if (searchCacheIndexParking == TRUCK_INDEX) {
                 places[searchCacheIndexParking][searchCacheIndexPlace] = car;
             } else {
                 for (int i = 0; i < car.getSize(); i++) {
                     places[searchCacheIndexParking][searchCacheIndexPlace + i] = car;
                 }
             }
+            rslt = true;
         }
         return rslt;
     }
@@ -163,20 +165,21 @@ public class SimpleParking implements Parking {
             throw new IllegalArgumentException("Illegal argument.");
         }
 
-        Car tmp;
+        Car rslt;
         if (searchCar(car)) {
-            if (searchCacheIndexParking == 1) {
+            if (searchCacheIndexParking == TRUCK_INDEX) {
                 places[searchCacheIndexParking][searchCacheIndexPlace] = null;
             } else {
                 for (int i = 0; i < car.getSize(); i++) {
                     places[searchCacheIndexParking][searchCacheIndexPlace + i] = null;
                 }
             }
-            tmp = searchCacheCar;
+            rslt = searchCacheCar;
             searchCacheCar = null;
         } else {
-            throw new IllegalArgumentException("There is no such car in the parking lot.");
+            System.out.println("There is no such car in the parking lot.");
+            rslt = null;
         }
-        return tmp;
+        return rslt;
     }
 }
