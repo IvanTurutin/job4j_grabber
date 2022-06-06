@@ -49,7 +49,7 @@ public class SimpleParking implements Parking {
     /**
      * Метод производит поиск автомобиля на парковке.
      * @param car автомобиль, который необходимо найти
-     * @return true если автомобиль найден, false если не найден.
+     * @return координаты [тип парковки, номер парковочного места] если автомобиль найден, null если не найден.
      */
     private int[] searchCar(Car car) {
         int[] rslt = null;
@@ -69,7 +69,8 @@ public class SimpleParking implements Parking {
      * Метод осуществляет поиск места для случая 1 автомобиль на 1 место.
      * @param car автомобиль который требуется запарковать.
      * @param index индекс парковки: 0 - парковка пассажирских автомобилей, 1 - парковка грузовых автомобилей.
-     * @return true если место есть, false если места нет.
+     * @return координаты [тип парковки, номер парковочного места] если место для автомобиля найдено,
+     * null если место не найдено.
      */
     private int[] searchSpaceOneCarOneSpace(Car car, int index) {
         int[] rslt = null;
@@ -86,7 +87,8 @@ public class SimpleParking implements Parking {
      * Метод осуществляет поиск парковочного места для грузовика сначала в массиве для грузовых
      * автомобилей и если место не найдено, то осуществляется поиск по массиву для пассажирских автомобилей.
      * @param car автомобиль, для которого требуется найти место
-     * @return true если место найдено, false если место не найдено.
+     * @return координаты [тип парковки, номер парковочного места] если место для автомобиля найдено,
+     * null если место не найдено.
      */
     private int[] searchSpaceForTruck(Car car) {
         int[] rslt = searchSpaceOneCarOneSpace(car, TRUCK_PARKING);
