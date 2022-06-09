@@ -4,12 +4,21 @@ public class ConsoleOutput implements Output {
 
     @Override
     public void println(Object obj) {
-        System.out.println(obj.toString());
+        if (obj != null) {
+            System.out.println(obj.toString());
+        } else {
+            System.out.println("null");
+        }
     }
 
     @Override
     public void print(Object obj) {
-        System.out.print(obj.toString());
+        if (obj != null) {
+            System.out.print(obj.toString());
+        } else {
+            System.out.print("null");
+        }
+
     }
 
 }

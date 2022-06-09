@@ -2,7 +2,7 @@ package ru.job4j.design.isp.menu;
 
 public class ConsoleMenuPrinter implements MenuPrinter {
 
-    Output output;
+    private Output output;
 
     public ConsoleMenuPrinter(Output output) {
         this.output = output;
