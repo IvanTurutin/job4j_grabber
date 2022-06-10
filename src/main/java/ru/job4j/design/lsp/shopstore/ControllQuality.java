@@ -18,4 +18,14 @@ public class ControllQuality {
         }
         return foodList;
     }
+
+    public List<Food> resort() {
+        List<Food> foodList = new ArrayList<>();
+        for (Store store : stores) {
+            foodList.addAll(store.findAll(e -> true));
+            store.removeAll(e -> true);
+        }
+        return sortFoods(foodList);
+    }
+
 }

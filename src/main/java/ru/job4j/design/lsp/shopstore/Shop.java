@@ -9,6 +9,7 @@ public class Shop implements Store {
     private List<Food> foodList = new ArrayList<>();
     private static final float ALLOWABLE_PERCENTAGE_TOP = 0.75f;
     private static final float ALLOWABLE_PERCENTAGE_DISCOUNT = 0.25f;
+    private static final double DISCOUNT_EXCLUSION = 0;
 
     @Override
     public boolean add(Food food) {
@@ -19,6 +20,7 @@ public class Shop implements Store {
             rsl = true;
         } else if (coeff <= ALLOWABLE_PERCENTAGE_DISCOUNT && coeff > 0) {
             food.setPrice(food.getPrice() * (1 - food.getDiscount()));
+            food.setDiscount(DISCOUNT_EXCLUSION);
             foodList.add(food);
             rsl = true;
         }

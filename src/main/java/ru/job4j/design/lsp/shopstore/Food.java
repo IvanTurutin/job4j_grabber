@@ -79,12 +79,15 @@ public class Food {
             return false;
         }
         Food food = (Food) o;
-        return Objects.equals(name, food.name);
+        return Double.compare(food.price, price) == 0
+                && Objects.equals(name, food.name)
+                && Objects.equals(expiryDate, food.expiryDate)
+                && Objects.equals(createDate, food.createDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, expiryDate, createDate, price);
     }
 
     @Override

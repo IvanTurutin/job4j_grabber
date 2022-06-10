@@ -1,5 +1,6 @@
 package ru.job4j.design.lsp;
 
+import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.design.lsp.shopstore.*;
 
@@ -13,61 +14,110 @@ import static org.junit.Assert.*;
 
 public class ControllQualityTest {
 
-    @Test
-    public void sortFoods() {
-        Store warehouse = new Warehouse();
-        Store shop = new Shop();
-        Store trash = new Trash();
+    private Store warehouse;
+    private Store shop;
+    private Store trash;
+    private Calendar currentDate = Calendar.getInstance();
+    private long sixtyDayInMillis = 1000L * 60L * 60L * 24L * 60L;
+    private ControllQuality cq;
+    private List<Food> foods;
+    private Calendar createDate1 = Calendar.getInstance();
+    private Calendar expiryDate1 = Calendar.getInstance();
+    private Calendar createDate2 = Calendar.getInstance();
+    private Calendar expiryDate2 = Calendar.getInstance();
+    private Calendar createDate3 = Calendar.getInstance();
+    private Calendar expiryDate3 = Calendar.getInstance();
+    private Calendar createDate4 = Calendar.getInstance();
+    private Calendar expiryDate4 = Calendar.getInstance();
+    private Food food1;
+    private Food food2;
+    private Food food3;
+    private Food food4;
 
-        ControllQuality cq = new ControllQuality(warehouse, shop, trash);
 
-        Calendar currentDate = Calendar.getInstance();
+    @Before
+    public void initObjects() {
 
-        var sixtyDayInMillis = 1000L * 60L * 60L * 24L * 60L;
+        warehouse = new Warehouse();
+        shop = new Shop();
+        trash = new Trash();
+
+        cq = new ControllQuality(warehouse, shop, trash);
 
         double coef1 = 1;
-        Calendar createDate1 = Calendar.getInstance();
         createDate1.setTimeInMillis(currentDate.getTimeInMillis() - (long) (sixtyDayInMillis * (1 - coef1)));
-        Calendar expiryDate1 = Calendar.getInstance();
         expiryDate1.setTimeInMillis(currentDate.getTimeInMillis() + (long) (sixtyDayInMillis * coef1));
 
         double coef2 = 0.5;
-        Calendar createDate2 = Calendar.getInstance();
         createDate2.setTimeInMillis(currentDate.getTimeInMillis() - (long) (sixtyDayInMillis * (1 - coef2)));
-        Calendar expiryDate2 = Calendar.getInstance();
         expiryDate2.setTimeInMillis(currentDate.getTimeInMillis() + (long) (sixtyDayInMillis * coef2));
 
         double coef3 = 0.15;
-        Calendar createDate3 = Calendar.getInstance();
         createDate3.setTimeInMillis(currentDate.getTimeInMillis() - (long) (sixtyDayInMillis * (1 - coef3)));
-        Calendar expiryDate3 = Calendar.getInstance();
         expiryDate3.setTimeInMillis(currentDate.getTimeInMillis() + (long) (sixtyDayInMillis * coef3));
 
         double coef4 = -0.1;
-        Calendar createDate4 = Calendar.getInstance();
         createDate4.setTimeInMillis(currentDate.getTimeInMillis() - (long) (sixtyDayInMillis * (1 - coef4)));
-        Calendar expiryDate4 = Calendar.getInstance();
         expiryDate4.setTimeInMillis(currentDate.getTimeInMillis() + (long) (sixtyDayInMillis * coef4));
 
-        Food food1 = new Potatoes("food1", expiryDate1, createDate1, 100, 0.2);
-        Food food2 = new Potatoes("food2", expiryDate2, createDate2, 150, 0.2);
-        Food food3 = new Bread("food3", expiryDate3, createDate3, 50, 0.1);
-        Food food4 = new Bread("food4", expiryDate4, createDate4, 70, 0.1);
+        food1 = new Potatoes("food1", expiryDate1, createDate1, 100, 0.2);
+        food2 = new Potatoes("food2", expiryDate2, createDate2, 150, 0.2);
+        food3 = new Bread("food3", expiryDate3, createDate3, 50, 0.1);
+        food4 = new Bread("food4", expiryDate4, createDate4, 70, 0.1);
 
-        List<Food> foods = new ArrayList<>(List.of(food1, food2, food3, food4));
+        foods = new ArrayList<>(List.of(food1, food2, food3, food4));
+
+    }
+
+    @Test
+    public void whenSortFoods() {
 
         List<Food> rsl = cq.sortFoods(foods);
 
         assertThat(warehouse.findAll(f -> true).get(0),
-                is(new Potatoes("food1", expiryDate1, createDate1, 100, 0.2)));
+                is(new Potatoes("food1", expiryDate1, createDate1, 100)));
         assertTrue(shop.findAll(f -> true)
-                .contains(new Potatoes("food2", expiryDate2, createDate2, 150, 0.2)));
+                .contains(new Potatoes("food2", expiryDate2, createDate2, 150)));
         assertTrue(shop.findAll(f -> true)
-                .contains(new Bread("food3", expiryDate3, createDate3, 45, 0.1)));
+                .contains(new Bread("food3", expiryDate3, createDate3, 45)));
         assertThat(shop.findAll(f -> "food3".equals(f.getName())).get(0).getPrice(),
                 closeTo(45, 0.00001));
         assertThat(trash.findAll(f -> true).get(0),
-                is(new Bread("food4", expiryDate4, createDate4, 70, 0.1)));
+                is(new Bread("food4", expiryDate4, createDate4, 70)));
         assertThat(rsl.size(), is(0));
     }
+
+    @Test
+    public void whenReSortFoods() {
+        cq.sortFoods(foods);
+        food1.setCreateDate(createDate2);
+        food1.setExpiryDate(expiryDate2);
+        food2.setCreateDate(createDate3);
+        food2.setExpiryDate(expiryDate3);
+        food3.setCreateDate(createDate4);
+        food3.setExpiryDate(expiryDate4);
+        food4.setCreateDate(createDate1);
+        food4.setExpiryDate(expiryDate1);
+
+        List<Food> rsl = cq.resort();
+        assertThat(warehouse.findAll(f -> true).get(0),
+                is(new Bread("food4", expiryDate1, createDate1, 70)));
+        assertTrue(shop.findAll(f -> true)
+                .contains(new Potatoes("food1", expiryDate2, createDate2, 100)));
+        assertTrue(shop.findAll(f -> true)
+                .contains(new Potatoes("food2", expiryDate3, createDate3, 120)));
+        assertTrue(trash.findAll(f -> true)
+                .contains(new Bread("food3", expiryDate4, createDate4, 45)));
+        assertThat(rsl.size(), is(0));
+    }
+
+    @Test
+    public void whenSortFoodsTwicePriceDiscountedOnce() {
+        cq.sortFoods(foods);
+        cq.resort();
+
+        assertThat(shop.findAll(f -> "food3".equals(f.getName())).get(0).getPrice(),
+                closeTo(45, 0.00001));
+    }
+
 }

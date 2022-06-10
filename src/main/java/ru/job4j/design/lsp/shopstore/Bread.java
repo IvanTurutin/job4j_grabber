@@ -8,4 +8,8 @@ public class Bread extends Food {
         super(name, expiryDate, createDate, price, discount);
     }
 
+    public Bread(String name, Calendar expiryDate, Calendar createDate, double price) {
+        super(name, expiryDate, createDate, price);
+    }
+
 }

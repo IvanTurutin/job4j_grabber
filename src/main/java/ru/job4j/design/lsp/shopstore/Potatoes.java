@@ -8,4 +8,8 @@ public class Potatoes extends Food {
         super(name, expiryDate, createDate, price, discount);
     }
 
+    public Potatoes(String name, Calendar expiryDate, Calendar createDate, double price) {
+        super(name, expiryDate, createDate, price);
+    }
+
 }
