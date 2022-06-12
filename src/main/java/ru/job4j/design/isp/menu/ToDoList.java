@@ -74,7 +74,7 @@ public class ToDoList {
                 select = Integer.parseInt(input);
                 invalid = false;
             } catch (NumberFormatException e) {
-                System.out.println("Wrong input, you should select: 0 .. 3");
+                System.out.println("Wrong input, you should select: 0 .. 2");
             }
         } while (invalid);
         return select;

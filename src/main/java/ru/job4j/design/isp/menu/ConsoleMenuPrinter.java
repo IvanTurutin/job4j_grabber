@@ -3,6 +3,7 @@ package ru.job4j.design.isp.menu;
 public class ConsoleMenuPrinter implements MenuPrinter {
 
     private Output output;
+    private static final String INDENT = "---";
 
     public ConsoleMenuPrinter(Output output) {
         this.output = output;
@@ -12,7 +13,7 @@ public class ConsoleMenuPrinter implements MenuPrinter {
     public void print(Menu menu) {
         for (Menu.MenuItemInfo menuItemInfo : menu) {
             output.println(
-                    "---".repeat((int) menuItemInfo.getNumber().chars().filter(c -> '.' == c).count() - 1)
+                    INDENT.repeat((int) menuItemInfo.getNumber().chars().filter(c -> '.' == c).count() - 1)
                             .concat(menuItemInfo.getNumber())
                             .concat(menuItemInfo.getName())
             );
